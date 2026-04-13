@@ -45,6 +45,7 @@
 
     .check-item{display:flex;align-items:flex-start;gap:10px;margin-top:4px}
     .check-item span{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.6}
+    .checkbox-error{outline:2px solid rgba(255,68,68,0.6);outline-offset:2px;border-radius:3px}
 
     .feature-row{display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
     .feature-row:last-child{border-bottom:none}
@@ -297,6 +298,7 @@ function submitForm(e){
   if(!email.value.trim()||!email.value.includes('@')){email.classList.add('error');valid=false;}
   if(!phone.value.trim()){phone.classList.add('error');valid=false;}
   if(!privacy.checked){privacy.classList.add('checkbox-error');valid=false;}
+  privacy.addEventListener('change',function(){privacy.classList.remove('checkbox-error')},{once:true});
 
   if(!valid) return;
 
@@ -323,13 +325,10 @@ function submitForm(e){
     body:JSON.stringify(payload)
   })
   .then(function(){
-    document.getElementById('formWrap').classList.add('hidden');
-    document.getElementById('successMsg').classList.add('active');
+    setTimeout(function(){ window.location.href='thank-you.html'; }, 2000);
   })
   .catch(function(){
-    /* fallback: mostra success anche se webhook fallisce */
-    document.getElementById('formWrap').classList.add('hidden');
-    document.getElementById('successMsg').classList.add('active');
+    setTimeout(function(){ window.location.href='thank-you.html'; }, 2000);
   });
 }
 
