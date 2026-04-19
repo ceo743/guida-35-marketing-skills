@@ -132,10 +132,10 @@
   <div style="height:16px"></div>
 
   <!-- ===== MAIN LAYOUT: FEATURES + FORM ===== -->
-  <div style="max-width:980px;width:100%;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+  <div class="main-grid" data-main-grid style="max-width:980px;width:100%;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
 
     <!-- LEFT: Cosa ottieni -->
-    <div>
+    <div class="left-col">
       <p style="font-size:11px;text-transform:uppercase;letter-spacing:4px;color:#D4AF37;font-weight:600;margin-bottom:16px">Cosa c'è dentro la guida</p>
       <h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,30px);font-weight:800;line-height:1.15;margin-bottom:24px;letter-spacing:-0.01em">
         Un cervello marketing completo.<br>
@@ -201,7 +201,7 @@
     </div>
 
     <!-- RIGHT: Form -->
-    <div class="card" id="formCard">
+    <div class="card right-col" id="formCard">
       <div class="form-wrap" id="formWrap">
         <div style="margin-bottom:24px;text-align:center">
           <p style="font-size:13px;text-transform:uppercase;letter-spacing:3px;color:#D4AF37;font-weight:600;margin-bottom:10px">Accesso gratuito</p>
@@ -248,8 +248,18 @@
     </div>
   </div>
 
-  <!-- Mobile: Features sotto il form -->
-  <style>@media(max-width:768px){.main-grid{grid-template-columns:1fr!important}.left-col{order:2}.right-col{order:1}}</style>
+  <!-- Mobile: form sopra, features sotto, colonna singola -->
+  <style>
+    @media(max-width:768px){
+      .main-grid{grid-template-columns:1fr!important;gap:24px!important;padding:0 12px!important}
+      .left-col{order:2}
+      .right-col{order:1;max-width:100%!important}
+      .card{max-width:100%!important;margin:0!important}
+    }
+    @media(max-width:480px){
+      .main-grid{padding:0 8px!important;gap:20px!important}
+    }
+  </style>
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -295,10 +305,8 @@ function submitForm(e){
   [name,email,phone].forEach(function(f){f.classList.remove('error');});
 
   if(!name.value.trim()){name.classList.add('error');valid=false;}
-  var emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if(!email.value.trim()||!emailRegex.test(email.value.trim())){email.classList.add('error');valid=false;}
-  var phoneDigits=phone.value.replace(/[^\d]/g,'');
-  if(!phone.value.trim()||phoneDigits.length<8){phone.classList.add('error');valid=false;}
+  if(!email.value.trim()||!email.value.includes('@')){email.classList.add('error');valid=false;}
+  if(!phone.value.trim()){phone.classList.add('error');valid=false;}
   if(!privacy.checked){privacy.classList.add('checkbox-error');valid=false;}
   privacy.addEventListener('change',function(){privacy.classList.remove('checkbox-error')},{once:true});
 
@@ -387,7 +395,6 @@ function submitForm(e){
 
 /* ===== Responsive 2-col layout ===== */
 (function(){
-  var grid=document.querySelector('.main-grid-container');
   function checkLayout(){
     var w=window.innerWidth;
     var mainGrid=document.querySelector('[data-main-grid]');
@@ -395,6 +402,7 @@ function submitForm(e){
     if(w<=768){mainGrid.style.gridTemplateColumns='1fr';}
     else{mainGrid.style.gridTemplateColumns='1fr 1fr';}
   }
+  checkLayout(); // applica subito al caricamento
   window.addEventListener('resize',checkLayout);
 })();
 </script>
